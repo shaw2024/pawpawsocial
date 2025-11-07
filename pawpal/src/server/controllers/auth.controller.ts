@@ -23,11 +23,16 @@ export const signup = async (req: Request, res: Response) => {
         const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
         // Set cookie (httpOnly) for session maintenance
-        res.cookie('token', token, {
+        // Add SameSite and explicit path for better CSRF protection
+        const cookieOptions = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax' as const,
+            path: '/',
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-        });
+        };
+
+        res.cookie('token', token, cookieOptions);
 
         res.status(201).json({ user: { id: newUser._id, username: newUser.username, email: newUser.email, dogBreed: newUser.dogBreed, profilePicture: newUser.profilePicture } });
     } catch (error) {
@@ -52,11 +57,15 @@ export const login = async (req: Request, res: Response) => {
 
         const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
-        res.cookie('token', token, {
+        const cookieOptions = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax' as const,
+            path: '/',
             maxAge: 7 * 24 * 60 * 60 * 1000
-        });
+        };
+
+        res.cookie('token', token, cookieOptions);
 
         res.status(200).json({ user: { id: user._id, username: user.username, email: user.email, dogBreed: user.dogBreed, profilePicture: user.profilePicture } });
     } catch (error) {
@@ -66,7 +75,9 @@ export const login = async (req: Request, res: Response) => {
 
 // Logout (clears cookie)
 export const logout = async (_req: Request, res: Response) => {
-    res.clearCookie('token');
+    // Clear cookie using same options to ensure it is removed in browsers
+    const clearOptions = { path: '/' };
+    res.clearCookie('token', clearOptions);
     res.status(200).json({ message: 'Logged out' });
 };
 

@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 import dotenv from 'dotenv';
 
 import authRoutes from './routes/auth.routes';
@@ -17,7 +18,12 @@ const PORT = process.env.PORT || 5000;
 dotenv.config();
 
 // Middleware
-app.use(cors({ origin: true, credentials: true }));
+// Use Helmet to set safe HTTP headers
+app.use(helmet());
+
+// Strict CORS configuration: prefer explicit CLIENT_URL in prod, fallback to Vite default during dev
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+app.use(cors({ origin: CLIENT_URL, credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
