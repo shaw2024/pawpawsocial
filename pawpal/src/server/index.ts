@@ -22,7 +22,7 @@ dotenv.config();
 app.use(helmet());
 
 // Strict CORS configuration: prefer explicit CLIENT_URL in prod, fallback to Vite default during dev
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3002';
 app.use(cors({ origin: CLIENT_URL, credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -34,16 +34,35 @@ app.use('/api/users', userRoutes);
 app.use('/api/uploads', uploadRoutes);
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/pawpal', {
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/pawpal';
+
+console.log('🚀 Starting PawPal server...');
+console.log(`📍 Client URL: ${CLIENT_URL}`);
+console.log(`🔗 Connecting to MongoDB: ${MONGODB_URI}`);
+
+mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
 .then(() => {
-    console.log('Connected to MongoDB');
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
+    console.log('✅ Connected to MongoDB');
+    startServer();
 })
 .catch(err => {
-    console.error('Database connection error:', err);
+    console.error('❌ Database connection error:', err.message);
+    console.log('💡 To fix this:');
+    console.log('   1. Install MongoDB locally, or');
+    console.log('   2. Set MONGODB_URI to a cloud MongoDB connection string (e.g., MongoDB Atlas)');
+    console.log('   3. For now, server will start without database...');
+    
+    // Start server anyway for frontend development
+    startServer();
 });
+
+function startServer() {
+    app.listen(PORT, () => {
+        console.log(`🎉 Server is running on http://localhost:${PORT}`);
+        console.log(`📱 Frontend should be at http://localhost:3002`);
+        console.log(`📚 API endpoints available at http://localhost:${PORT}/api`);
+    });
+}
