@@ -1,0 +1,16 @@
+{
+  "name": "PawPal",
+  "short_name": "PawPal",
+  "description": "A social platform dedicated to dog lovers.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffcc00",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
