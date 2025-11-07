@@ -1,3 +1,54 @@
+# PawPal — dog lovers social app
+
+This repository contains a full-stack prototype for PawPal: a small social platform for dog lovers. It includes a TypeScript/Express backend and a React frontend (Vite + Tailwind). Features implemented in this workspace:
+
+- User signup/login with bcrypt + JWT (httpOnly cookie)
+- Posting text + images (Cloudinary upload)
+- Likes and comments on posts
+- Timeline feed with server-side pagination
+- Tailwind-based UI (Vite dev server configured)
+
+Quick setup (local):
+
+1. Copy environment variables (create a `.env` at project root or in `pawpal`):
+
+```
+MONGODB_URI=your_mongo_uri
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+PORT=5000
+```
+
+2. Install dependencies in `pawpal`:
+
+```bash
+cd pawpal
+npm install
+```
+
+3. Start the Vite client (dev):
+
+```bash
+npm run client
+```
+
+4. Start the server (in another terminal):
+
+```bash
+npm start
+```
+
+Notes:
+- This is a prototype. Production readiness (Redis caching, JWT refresh tokens, rate limiting, tests, CI/CD) is still TODO.
+- If the editor flags `@tailwind` rules, run the Vite dev server to process Tailwind, or install Tailwind IntelliSense in your editor.
+
+Want me to continue? I can:
+- add tests (Jest + supertest) for API endpoints
+- add Redis caching for the timeline
+- implement JWT refresh tokens and rate limiting
+- set up GitHub Actions and a deployment workflow
 # PawPal - A Social Platform for Dog Lovers
 
 Welcome to PawPal, a social platform dedicated to dog lovers! This application allows users to create accounts, post updates and pictures, and interact with each other through likes and comments. Join our community and share your love for dogs!
